@@ -1,10 +1,9 @@
-package com.hazelement.onebus.onebusserver.models;
+package com.hazelement.onebus.onebusserver.model;
 
 
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalTime;
 
 @Data
 @Entity

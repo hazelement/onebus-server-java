@@ -1,4 +1,4 @@
-package com.hazelement.onebus.onebusserver.models;
+package com.hazelement.onebus.onebusserver.model;
 
 
 import lombok.Data;
