@@ -24,7 +24,7 @@ public class Trip {
     @JoinColumn(name = "fk_service")
     private Service service;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_shape")
     private Shape shape;
 }

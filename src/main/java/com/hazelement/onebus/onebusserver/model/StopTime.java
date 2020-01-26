@@ -22,7 +22,7 @@ public class StopTime {
     private int arrival_time;
     private int departure_time;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_stop")
     private Stop stop;
 
