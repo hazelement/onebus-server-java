@@ -5,18 +5,16 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity
 @Data
-public class Stop {
+@Entity
+public class Route {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(unique = true)
-    private String stop_id;
-    private String stop_name;
-    private Float stop_lat;
-    private Float stop_lon;
-
+    private String route_id;
+    private String route_short_name;
+    private String route_long_name;
 }
