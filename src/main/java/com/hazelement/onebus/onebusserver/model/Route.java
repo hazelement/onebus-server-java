@@ -1,12 +1,14 @@
 package com.hazelement.onebus.onebusserver.model;
 
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@Builder
 public class Route {
 
     @Id

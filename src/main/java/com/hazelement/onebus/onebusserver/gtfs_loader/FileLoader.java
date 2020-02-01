@@ -15,18 +15,20 @@ public class FileLoader{
         this.pathToFile = pathToFile;
     }
 
-    public void loadFile(GtfsParser gtfsParser){
+    public void loadFile(FileLineParser fileLineParser) throws IOException {
         BufferedReader reader;
         try{
+            log.debug("Loading file at " + pathToFile);
             reader = new BufferedReader(new FileReader(pathToFile));
             String line = reader.readLine();
             while (line!=null){
                 log.debug(line);
-                gtfsParser.parseGtfsLine(line);
+                fileLineParser.parseFileLine(line);
                 line = reader.readLine();
             }
         } catch (IOException e){
             log.error(e.getMessage());
+            throw e;
         }
 
     }
