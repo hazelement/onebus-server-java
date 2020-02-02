@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
-@Transactional
 public class RouteParser extends FileLoader {
 
     private RouteRepository routeRepository;
@@ -19,6 +18,7 @@ public class RouteParser extends FileLoader {
         this.routeRepository = routeRepository;
     }
 
+    @Transactional
     public void loadToDB() throws GtfsFileReadingException {
         try {
             GtfsLineParser gtfsLineParser = new GtfsLineParser(headers);

@@ -1,14 +1,20 @@
 package com.hazelement.onebus.onebusserver.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+// for builder to work with JPA
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+//
 public class Route {
 
     @Id
