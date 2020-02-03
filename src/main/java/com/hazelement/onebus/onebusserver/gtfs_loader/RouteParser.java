@@ -26,9 +26,9 @@ public class RouteParser extends FileLoader {
                 String[] items = line.split(",");
                 gtfsLineParser.parseData(items, data -> {
                     Route route = Route.builder()
-                            .route_id(data.get("route_id").toString())
-                            .route_short_name(data.get("route_short_name").toString())
-                            .route_long_name(data.get("route_long_name").toString())
+                            .route_id(data.get("route_id"))
+                            .route_short_name(data.get("route_short_name"))
+                            .route_long_name(data.get("route_long_name"))
                             .build();
                     routeRepository.save(route);
                 });

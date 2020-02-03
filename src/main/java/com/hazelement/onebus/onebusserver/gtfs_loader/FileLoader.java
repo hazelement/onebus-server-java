@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 
 @Slf4j
 public class FileLoader{
@@ -23,7 +24,11 @@ public class FileLoader{
             String line = reader.readLine();
             while (line!=null){
                 log.debug(line);
-                fileLineParser.parseFileLine(line);
+                try {
+                    fileLineParser.parseFileLine(line);
+                } catch (ParseException e){
+                    throw new IOException(e.getMessage());
+                }
                 line = reader.readLine();
             }
         } catch (IOException e){
