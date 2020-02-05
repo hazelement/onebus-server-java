@@ -5,5 +5,5 @@ import java.util.HashMap;
 
 public interface GtfsDataParser {
 
-    public void parseGtfsData(HashMap<String, String> data) throws ParseException;
+    void parseGtfsData(HashMap<String, String> data) throws ParseException;
 }

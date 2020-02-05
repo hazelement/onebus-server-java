@@ -16,7 +16,7 @@ public class FileLoader{
         this.pathToFile = pathToFile;
     }
 
-    public void loadFile(FileLineParser fileLineParser) throws IOException {
+    public void readFileLineByLine(FileLineParser fileLineParser) throws IOException {
         BufferedReader reader;
         try{
             log.debug("Loading file at " + pathToFile);
