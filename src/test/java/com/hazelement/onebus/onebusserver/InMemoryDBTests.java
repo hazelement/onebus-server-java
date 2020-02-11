@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @Slf4j
 @SpringBootTest
-public class InMemoryDBTest {
+public class InMemoryDBTests {
     @Autowired
     private RouteRepository routeRepository;
     @Autowired
@@ -38,8 +38,10 @@ public class InMemoryDBTest {
 
     String TEST_GTFS_FOLDER = "classpath:vancouver_transit/";
 
+    // todo test exceptions
+
     @Test
-    void testLoadRouteTable() {
+    void loadRouteTable_WithFileName_ExpectedBehavior() {
 
         int numEntries = -1;
         try {
@@ -55,7 +57,7 @@ public class InMemoryDBTest {
     }
 
     @Test
-    void testLoadServiceTable (){
+    void loadServiceTable_WithFileName_ExpectedBehavior() {
         int numEntries = -1;
         try {
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "calendar.txt");
@@ -70,7 +72,7 @@ public class InMemoryDBTest {
     }
 
     @Test
-    void testLoadShapeTable (){
+    void loadShapeTable_WithFileName_ExpectedBehavior() {
         int numEntries = -1;
         try {
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "shapes.txt");
@@ -85,7 +87,7 @@ public class InMemoryDBTest {
     }
 
     @Test
-    void testLoadStopTable() {
+    void loadStopTable_WithFileName_ExpectedBehavior() {
         int numEntries = -1;
         try {
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "stops.txt");
