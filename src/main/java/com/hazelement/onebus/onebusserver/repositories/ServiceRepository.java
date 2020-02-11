@@ -1,6 +1,6 @@
-package com.hazelement.onebus.onebusserver.repository;
+package com.hazelement.onebus.onebusserver.repositories;
 
-import com.hazelement.onebus.onebusserver.model.Service;
+import com.hazelement.onebus.onebusserver.models.Service;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ServiceRepository extends JpaRepository<Service, Integer> {

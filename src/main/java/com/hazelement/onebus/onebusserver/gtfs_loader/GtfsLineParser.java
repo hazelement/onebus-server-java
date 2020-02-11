@@ -1,7 +1,5 @@
 package com.hazelement.onebus.onebusserver.gtfs_loader;
 
-import com.hazelement.onebus.onebusserver.exception.GtfsFileReadingException;
-
 import java.text.ParseException;
 import java.util.HashMap;
 

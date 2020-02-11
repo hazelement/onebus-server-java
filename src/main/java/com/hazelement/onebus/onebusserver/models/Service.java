@@ -1,4 +1,4 @@
-package com.hazelement.onebus.onebusserver.model;
+package com.hazelement.onebus.onebusserver.models;
 
 
 import lombok.AllArgsConstructor;

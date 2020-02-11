@@ -1,4 +1,4 @@
-package com.hazelement.onebus.onebusserver.exception;
+package com.hazelement.onebus.onebusserver.exceptions;
 
 import java.io.IOException;
 

@@ -1,20 +1,19 @@
 package com.hazelement.onebus.onebusserver.gtfs_loader;
 
-import com.hazelement.onebus.onebusserver.exception.GtfsFileReadingException;
-import com.hazelement.onebus.onebusserver.model.Route;
-import com.hazelement.onebus.onebusserver.model.Service;
-import com.hazelement.onebus.onebusserver.model.Shape;
-import com.hazelement.onebus.onebusserver.repository.RouteRepository;
-import com.hazelement.onebus.onebusserver.repository.ServiceRepository;
-import com.hazelement.onebus.onebusserver.repository.ShapeRepository;
-import com.sun.org.apache.xpath.internal.operations.Gt;
-import org.springframework.transaction.annotation.Transactional;
+import com.hazelement.onebus.onebusserver.exceptions.GtfsFileReadingException;
+import com.hazelement.onebus.onebusserver.models.Route;
+import com.hazelement.onebus.onebusserver.models.Service;
+import com.hazelement.onebus.onebusserver.models.Shape;
+import com.hazelement.onebus.onebusserver.models.Stop;
+import com.hazelement.onebus.onebusserver.repositories.RouteRepository;
+import com.hazelement.onebus.onebusserver.repositories.ServiceRepository;
+import com.hazelement.onebus.onebusserver.repositories.ShapeRepository;
+import com.hazelement.onebus.onebusserver.repositories.StopRepository;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class GtfsFileLoader {
-    public static void loadRouteData(RouteRepository routeRepository, String filename)
+    public static int loadRouteData(RouteRepository routeRepository, String filename)
             throws GtfsFileReadingException {
         String ROUTE_ID = "route_id";
         String ROUTE_SHORT_NAME = "route_short_name";
@@ -31,10 +30,10 @@ public class GtfsFileLoader {
                             .build();
                     routeRepository.save(route);
                 });
-        gtfsFileParser.loadToDB();
+        return gtfsFileParser.loadToDB() - 1; // excluding header
     }
 
-    public static void loadServiceData(ServiceRepository serviceRepository, String filename)
+    public static int loadServiceData(ServiceRepository serviceRepository, String filename)
             throws GtfsFileReadingException {
         String SERVICE_ID = "service_id";
         String MONDAY = "monday";
@@ -77,10 +76,10 @@ public class GtfsFileLoader {
                             .build();
                     serviceRepository.save(service);
                 });
-        gtfsFileParser.loadToDB();
+        return gtfsFileParser.loadToDB() - 1;
     }
 
-    public static void loadShapeData(ShapeRepository shapeRepository, String filename)
+    public static int loadShapeData(ShapeRepository shapeRepository, String filename)
             throws GtfsFileReadingException {
         String SHAPE_ID = "shape_id";
         String SHAPE_PT_LAT = "shape_pt_lat";
@@ -100,6 +99,28 @@ public class GtfsFileLoader {
                     shapeRepository.save(shape);
 
                 });
-        gtfsFileParser.loadToDB();
+        return gtfsFileParser.loadToDB() - 1;
+    }
+
+    public static int loadStopData(StopRepository stopRepository, String filename) throws GtfsFileReadingException {
+        String STOP_ID = "stop_id";
+        String STOP_NAME = "stop_name";
+        String STOP_LAT = "stop_lat";
+        String STOP_LON = "stop_lon";
+
+        String[] headers = {STOP_ID, STOP_NAME, STOP_LAT, STOP_LON};
+
+        GtfsFileParser gtfsFileParser = new GtfsFileParser(filename,
+                headers,
+                data -> {
+                    Stop stop = Stop.builder()
+                            .stop_id(data.get(STOP_ID))
+                            .stop_name(data.get(STOP_NAME))
+                            .stop_lat(Float.valueOf(data.get(STOP_LAT)))
+                            .stop_lon(Float.valueOf(data.get(STOP_LON)))
+                            .build();
+                    stopRepository.save(stop);
+                });
+        return gtfsFileParser.loadToDB() - 1;
     }
 }

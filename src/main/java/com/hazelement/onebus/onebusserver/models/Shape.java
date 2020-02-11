@@ -1,4 +1,4 @@
-package com.hazelement.onebus.onebusserver.model;
+package com.hazelement.onebus.onebusserver.models;
 
 
 import lombok.AllArgsConstructor;
@@ -15,14 +15,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 //
-public class Route {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"shape_id", "shape_pt_sequence"}))
+public class Shape {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(unique = true)
-    private String route_id;
-    private String route_short_name;
-    private String route_long_name;
+    private String shape_id;
+    private float shape_pt_lat;
+    private float shape_pt_lon;
+    private int shape_pt_sequence;
 }
