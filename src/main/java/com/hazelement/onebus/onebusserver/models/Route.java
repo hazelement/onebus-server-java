@@ -22,7 +22,7 @@ public class Route {
     private int id;
 
     @Column(unique = true)
-    private String route_id;
-    private String route_short_name;
-    private String route_long_name;
+    private String routeId;
+    private String routeShortName;
+    private String routeLongName;
 }

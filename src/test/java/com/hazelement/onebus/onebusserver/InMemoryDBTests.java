@@ -20,8 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @Slf4j
@@ -39,6 +38,7 @@ public class InMemoryDBTests {
     String TEST_GTFS_FOLDER = "classpath:vancouver_transit/";
 
     // todo test exceptions
+    // todo add code coverage report
 
     @Test
     void loadRouteTable_WithFileName_ExpectedBehavior() {
@@ -99,5 +99,12 @@ public class InMemoryDBTests {
         List<Stop> stopList = stopRepository.findAll();
         log.info("Number of stops " + stopList.size());
         assertEquals(stopList.size(), numEntries);
+
+        Stop stop = stopRepository.findByStopId("10000");
+        assertNotNull(stop);
     }
+
+    // todo test load Trip
+
+    // todo test load StopTime
 }

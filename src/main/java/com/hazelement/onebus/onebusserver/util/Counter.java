@@ -1,8 +1,8 @@
 package com.hazelement.onebus.onebusserver.util;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class Counter implements Comparable<Counter> {
 
     private int count = 0;

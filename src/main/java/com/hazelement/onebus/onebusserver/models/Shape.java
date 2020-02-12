@@ -22,8 +22,8 @@ public class Shape {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String shape_id;
-    private float shape_pt_lat;
-    private float shape_pt_lon;
-    private int shape_pt_sequence;
+    private String shapeId;
+    private float shapePtLat;
+    private float shapePtLon;
+    private int shapePtSequence;
 }

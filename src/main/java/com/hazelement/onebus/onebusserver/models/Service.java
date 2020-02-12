@@ -23,7 +23,7 @@ public class Service {
     private int id;
 
     @Column(unique = true)
-    private String service_id;
+    private String serviceId;
 
     private int monday;
     private int tuesday;
@@ -32,6 +32,6 @@ public class Service {
     private int friday;
     private int saturday;
     private int sunday;
-    private Date start_date;
-    private Date end_date;
+    private Date startDate;
+    private Date endDate;
 }

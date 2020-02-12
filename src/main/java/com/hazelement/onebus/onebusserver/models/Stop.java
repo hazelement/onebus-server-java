@@ -22,9 +22,8 @@ public class Stop {
     private int id;
 
     @Column(unique = true)
-    private String stop_id;
-    private String stop_name;
-    private Float stop_lat;
-    private Float stop_lon;
-
+    private String stopId;
+    private String stopName;
+    private Float stopLat;
+    private Float stopLon;
 }
