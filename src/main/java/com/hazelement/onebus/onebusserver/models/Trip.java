@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,15 +24,15 @@ public class Trip {
     private String tripId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_route")
+    @JoinColumn(name = "fk_route", nullable = false)
     private Route route;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_service")
+    @JoinColumn(name = "fk_service", nullable = false)
     private Service service;
 
     // todo take another look at this, shape_id is not identical in shape file
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_shape")
-    private Shape shape;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_shape", nullable = false)
+    private List<Shape> shape;
 }

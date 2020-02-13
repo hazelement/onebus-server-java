@@ -20,8 +20,8 @@ public class StopTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_trip")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_trip", nullable = false)
     private Trip trip;
 
     // in seconds, can't use datetime because operating hours go beyond 24 hours
@@ -29,7 +29,7 @@ public class StopTime {
     private long departure_time;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_stop")
+    @JoinColumn(name = "fk_stop", nullable = false)
     private Stop stop;
 
     private int stop_sequence;

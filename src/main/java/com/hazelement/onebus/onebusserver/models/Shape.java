@@ -15,7 +15,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 //
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"shape_id", "shape_pt_sequence"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"shapeId", "shapePtSequence"}),
+        indexes = {@Index(name = "shape_id_index", columnList = "shapeId", unique = false)})
+
 public class Shape {
 
     @Id

@@ -2,14 +2,8 @@ package com.hazelement.onebus.onebusserver;
 
 
 import com.hazelement.onebus.onebusserver.gtfs_loader.GtfsFileLoader;
-import com.hazelement.onebus.onebusserver.models.Route;
-import com.hazelement.onebus.onebusserver.models.Service;
-import com.hazelement.onebus.onebusserver.models.Shape;
-import com.hazelement.onebus.onebusserver.models.Stop;
-import com.hazelement.onebus.onebusserver.repositories.RouteRepository;
-import com.hazelement.onebus.onebusserver.repositories.ServiceRepository;
-import com.hazelement.onebus.onebusserver.repositories.ShapeRepository;
-import com.hazelement.onebus.onebusserver.repositories.StopRepository;
+import com.hazelement.onebus.onebusserver.models.*;
+import com.hazelement.onebus.onebusserver.repositories.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +28,8 @@ public class InMemoryDBTests {
     private ShapeRepository shapeRepository;
     @Autowired
     private StopRepository stopRepository;
+    @Autowired
+    private TripRepository tripRepository;
 
     String TEST_GTFS_FOLDER = "classpath:vancouver_transit/";
 
@@ -104,7 +100,33 @@ public class InMemoryDBTests {
         assertNotNull(stop);
     }
 
-    // todo test load Trip
+    @Test
+    void loadTripTable_WithFileName_ExpectedBehavior() {
+        loadRouteTable_WithFileName_ExpectedBehavior();
+        loadServiceTable_WithFileName_ExpectedBehavior();
+        loadShapeTable_WithFileName_ExpectedBehavior();
+
+        int numEntries = -1;
+        try {
+            File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "trips.txt");
+            numEntries = GtfsFileLoader.loadTripData(
+                    tripRepository,
+                    routeRepository,
+                    serviceRepository,
+                    shapeRepository,
+                    file.getAbsolutePath());
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        List<Trip> tripList = tripRepository.findAll();
+        log.info("Number of trips " + tripList.size());
+        assertEquals(tripList.size(), numEntries);
+
+        Trip trip = tripRepository.findByTripId("11155207");
+        assertNotNull(trip);
+    }
+
 
     // todo test load StopTime
 }

@@ -1,15 +1,19 @@
 package com.hazelement.onebus.onebusserver.gtfs_loader;
 
-import com.hazelement.onebus.onebusserver.exceptions.GtfsFileReadingException;
+import com.hazelement.onebus.onebusserver.exceptions.GtfsDataParsingException;
+import com.hazelement.onebus.onebusserver.exceptions.GtfsException;
 import com.hazelement.onebus.onebusserver.models.*;
 import com.hazelement.onebus.onebusserver.repositories.*;
 import com.hazelement.onebus.onebusserver.util.GtfsTimeConverter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
+@Slf4j
 public class GtfsFileLoader {
     public static int loadRouteData(RouteRepository routeRepository, String filename)
-            throws GtfsFileReadingException {
+            throws GtfsException {
         String ROUTE_ID = "route_id";
         String ROUTE_SHORT_NAME = "route_short_name";
         String ROUTE_LONG_NAME = "route_long_name";
@@ -29,7 +33,7 @@ public class GtfsFileLoader {
     }
 
     public static int loadServiceData(ServiceRepository serviceRepository, String filename)
-            throws GtfsFileReadingException {
+            throws GtfsException {
         String SERVICE_ID = "service_id";
         String MONDAY = "monday";
         String TUESDAY = "tuesday";
@@ -75,7 +79,7 @@ public class GtfsFileLoader {
     }
 
     public static int loadShapeData(ShapeRepository shapeRepository, String filename)
-            throws GtfsFileReadingException {
+            throws GtfsException {
         String SHAPE_ID = "shape_id";
         String SHAPE_PT_LAT = "shape_pt_lat";
         String SHAPE_PT_LON = "shape_pt_lon";
@@ -97,7 +101,7 @@ public class GtfsFileLoader {
         return gtfsFileParser.loadToDB() - 1;
     }
 
-    public static int loadStopData(StopRepository stopRepository, String filename) throws GtfsFileReadingException {
+    public static int loadStopData(StopRepository stopRepository, String filename) throws GtfsException {
         String STOP_ID = "stop_id";
         String STOP_NAME = "stop_name";
         String STOP_LAT = "stop_lat";
@@ -125,11 +129,11 @@ public class GtfsFileLoader {
             ServiceRepository serviceRepository,
             ShapeRepository shapeRepository,
             String filename)
-            throws GtfsFileReadingException {
+            throws GtfsException {
         String TRIP_ID = "trip_id";
-        String ROUTE = "route";
-        String SERVICE = "service";
-        String SHAPE = "shape";
+        String ROUTE = "route_id";
+        String SERVICE = "service_id";
+        String SHAPE = "shape_id";
 
         String[] headers = {TRIP_ID, ROUTE, SERVICE, SHAPE};
 
@@ -138,13 +142,22 @@ public class GtfsFileLoader {
                 data -> {
                     Route route = routeRepository.findByRouteId(data.get(ROUTE));
                     Service service = serviceRepository.findByServiceId(data.get(SERVICE));
-                    Shape shape = shapeRepository.findByShapeId(data.get(SHAPE));
+                    List<Shape> shapeList = shapeRepository.findByShapeId(data.get(SHAPE));
+
+                    if (route == null | service == null | shapeList == null) {
+                        throw new GtfsDataParsingException(
+                                String.format("Unable to retrieve route %s, service %s or shape %s for trip_id %s",
+                                        route,
+                                        service,
+                                        shapeList,
+                                        data.get(TRIP_ID)));
+                    }
 
                     Trip trip = Trip.builder()
                             .tripId(data.get(TRIP_ID))
                             .route(route)
                             .service(service)
-                            .shape(shape)
+                            .shape(shapeList)
                             .build();
                     tripRepository.save(trip);
                 });
@@ -155,11 +168,11 @@ public class GtfsFileLoader {
                                        TripRepository tripRepository,
                                        StopRepository stopRepository,
                                        String filename)
-            throws GtfsFileReadingException {
-        String TRIP = "trip";
+            throws GtfsException {
+        String TRIP = "trip_id";
         String ARRIVAL_TIME = "arrival_time";
         String DEPARTURE_TIME = "departure_time";
-        String STOP = "stop";
+        String STOP = "stop_id";
         String STOP_SEQUENCE = "stop_sequence";
 
         String[] headers = {TRIP, ARRIVAL_TIME, DEPARTURE_TIME, STOP, STOP_SEQUENCE};

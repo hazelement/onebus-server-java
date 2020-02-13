@@ -1,6 +1,7 @@
 package com.hazelement.onebus.onebusserver.gtfs_loader;
 
-import com.hazelement.onebus.onebusserver.exceptions.GtfsFileReadingException;
+import com.hazelement.onebus.onebusserver.exceptions.GtfsDataParsingException;
+import com.hazelement.onebus.onebusserver.exceptions.GtfsException;
 import com.hazelement.onebus.onebusserver.util.Counter;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,20 +22,24 @@ public class GtfsFileParser extends FileLoader{
      * Read file and process per GtfsDataParser
      *
      * @return number of file line processed
-     * @throws GtfsFileReadingException
+     * @throws GtfsException
      */
     @Transactional
-    public int loadToDB() throws GtfsFileReadingException {
+    public int loadToDB() throws GtfsException {
         final Counter counter = new Counter();
+        GtfsLineParser gtfsLineParser = new GtfsLineParser(headers);
         try {
-            GtfsLineParser gtfsLineParser = new GtfsLineParser(headers);
             this.readFileLineByLine(line -> {
                 counter.increment();
                 String[] items = line.split(",");
-                gtfsLineParser.parseData(items, dataParser);
+                try {
+                    gtfsLineParser.parseData(items, dataParser);
+                } catch (GtfsDataParsingException e) {
+                    throw new GtfsException(e.getMessage());
+                }
             });
         } catch (IOException e) {
-            throw new GtfsFileReadingException(e.getMessage());
+            throw new GtfsException(e.getMessage());
         }
         return counter.getCount();
     }

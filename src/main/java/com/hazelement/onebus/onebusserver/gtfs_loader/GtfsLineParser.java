@@ -1,5 +1,7 @@
 package com.hazelement.onebus.onebusserver.gtfs_loader;
 
+import com.hazelement.onebus.onebusserver.exceptions.GtfsDataParsingException;
+
 import java.text.ParseException;
 import java.util.HashMap;
 
@@ -11,10 +13,10 @@ public class GtfsLineParser {
         this.headers = headers;
     }
 
-    public void parseData(String[] items, GtfsDataParser dataParser) throws ParseException {
+    public void parseData(String[] items, GtfsDataParser dataParser) throws GtfsDataParsingException {
         if (headerColumnMap == null) {
             headerColumnMap = new HashMap<>();
-            for(String header:headers){
+            for (String header : headers) {
                 headerColumnMap.put(header, -1);
             }
             for (int i = 0; i < items.length; i++) {
@@ -25,10 +27,14 @@ public class GtfsLineParser {
             }
         } else {
             HashMap<String, String> data = new HashMap<>();
-            for(String header: headers){
+            for (String header : headers) {
                 data.put(header, items[headerColumnMap.get(header)]);
             }
-            dataParser.parseGtfsData(data);
+            try {
+                dataParser.parseGtfsData(data);
+            } catch (ParseException e) {
+                throw new GtfsDataParsingException(e.getMessage());
+            }
         }
     }
 }
