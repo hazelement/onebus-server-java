@@ -10,6 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+
+// todo consider using
+//  http://developer.onebusaway.org/modules/onebusaway-gtfs-modules/1.3.3/onebusaway-gtfs-transformer-cli.html#How_to_Reduce_your_GTFS
+
+
 @Slf4j
 public class GtfsFileLoader {
     public static int loadRouteData(RouteRepository routeRepository, String filename)
@@ -29,7 +34,7 @@ public class GtfsFileLoader {
                             .build();
                     routeRepository.save(route);
                 });
-        return gtfsFileParser.loadToDB() - 1; // excluding header
+        return gtfsFileParser.parseFile(); // excluding header
     }
 
     public static int loadServiceData(ServiceRepository serviceRepository, String filename)
@@ -75,7 +80,7 @@ public class GtfsFileLoader {
                             .build();
                     serviceRepository.save(service);
                 });
-        return gtfsFileParser.loadToDB() - 1;
+        return gtfsFileParser.parseFile();
     }
 
     public static int loadShapeData(ShapeRepository shapeRepository, String filename)
@@ -86,6 +91,7 @@ public class GtfsFileLoader {
         String SHAPE_PT_SEQUENCE = "shape_pt_sequence";
 
         String[] headers = {SHAPE_ID, SHAPE_PT_LAT, SHAPE_PT_LON, SHAPE_PT_SEQUENCE};
+
         GtfsFileParser gtfsFileParser = new GtfsFileParser(filename,
                 headers,
                 data -> {
@@ -96,9 +102,8 @@ public class GtfsFileLoader {
                             .shapePtSequence(Integer.parseInt(data.get(SHAPE_PT_SEQUENCE)))
                             .build();
                     shapeRepository.save(shape);
-
                 });
-        return gtfsFileParser.loadToDB() - 1;
+        return gtfsFileParser.parseFile();
     }
 
     public static int loadStopData(StopRepository stopRepository, String filename) throws GtfsException {
@@ -120,7 +125,8 @@ public class GtfsFileLoader {
                             .build();
                     stopRepository.save(stop);
                 });
-        return gtfsFileParser.loadToDB() - 1;
+
+        return gtfsFileParser.parseFile();
     }
 
     public static int loadTripData(
@@ -136,7 +142,6 @@ public class GtfsFileLoader {
         String SHAPE = "shape_id";
 
         String[] headers = {TRIP_ID, ROUTE, SERVICE, SHAPE};
-
         GtfsFileParser gtfsFileParser = new GtfsFileParser(filename,
                 headers,
                 data -> {
@@ -161,7 +166,7 @@ public class GtfsFileLoader {
                             .build();
                     tripRepository.save(trip);
                 });
-        return gtfsFileParser.loadToDB() - 1;
+        return gtfsFileParser.parseFile();
     }
 
     public static int loadStopTimeData(StopTimeRepository stopTimeRepository,
@@ -195,7 +200,7 @@ public class GtfsFileLoader {
 
                     stopTimeRepository.save(stopTime);
                 });
-        return gtfsFileParser.loadToDB() - 1;
+        return gtfsFileParser.parseFile() - 1;
     }
 
 

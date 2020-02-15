@@ -21,11 +21,11 @@ public class GtfsFileParser extends FileLoader{
     /**
      * Read file and process per GtfsDataParser
      *
-     * @return number of file line processed
+     * @return number of records processed
      * @throws GtfsException
      */
     @Transactional
-    public int loadToDB() throws GtfsException {
+    public int parseFile() throws GtfsException {
         final Counter counter = new Counter();
         GtfsLineParser gtfsLineParser = new GtfsLineParser(headers);
         try {
@@ -41,7 +41,7 @@ public class GtfsFileParser extends FileLoader{
         } catch (IOException e) {
             throw new GtfsException(e.getMessage());
         }
-        return counter.getCount();
+        return counter.getCount() - 1;
     }
 
 

@@ -1,0 +1,15 @@
+agency_id,route_id,route_short_name,route_long_name,route_type
+Calgary Transit,105-20573,105,Dalhousie-Lions Park,3
+Calgary Transit,129-20573,129,Dalhousie - Sage Hill,3
+Calgary Transit,146-20573,146,Beddington,3
+Calgary Transit,2-20573,2,Mt. Pleasant / Killarney 17 Ave.,3
+Calgary Transit,3-20573,3,Sandstone/Elbow Drive,3
+Calgary Transit,31-20573,31,Dalhousie / Lions Park,3
+Calgary Transit,48-20573,48,Rundle,3
+Calgary Transit,5-20573,5,North Haven,3
+Calgary Transit,704-20573,704,Churchill/Edgepark Blvd,3
+Calgary Transit,723-20573,723,Bowness/Tuscany Hills,3
+Calgary Transit,738-20573,738,Diefenbaker/Panorama Hills North,3
+Calgary Transit,748-20573,748,Crescent Heights/ Hidden Ranch,3
+Calgary Transit,759-20573,759,Joane Cardinal-Schubert/McKenzie Towne,3
+Calgary Transit,97-20573,97,South Ranchlands-Scenic Acres,3

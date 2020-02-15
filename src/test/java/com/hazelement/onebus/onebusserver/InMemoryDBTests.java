@@ -31,7 +31,7 @@ public class InMemoryDBTests {
     @Autowired
     private TripRepository tripRepository;
 
-    String TEST_GTFS_FOLDER = "classpath:vancouver_transit/";
+    String TEST_GTFS_FOLDER = "classpath:calgary_transit/";
 
     // todo test exceptions
     // todo add code coverage report
@@ -41,6 +41,7 @@ public class InMemoryDBTests {
 
         int numEntries = -1;
         try {
+            routeRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "routes.txt");
             numEntries = GtfsFileLoader.loadRouteData(routeRepository, file.getAbsolutePath());
         } catch (IOException e) {
@@ -56,6 +57,7 @@ public class InMemoryDBTests {
     void loadServiceTable_WithFileName_ExpectedBehavior() {
         int numEntries = -1;
         try {
+            serviceRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "calendar.txt");
             numEntries = GtfsFileLoader.loadServiceData(serviceRepository, file.getAbsolutePath());
         } catch (IOException e) {
@@ -71,6 +73,7 @@ public class InMemoryDBTests {
     void loadShapeTable_WithFileName_ExpectedBehavior() {
         int numEntries = -1;
         try {
+            shapeRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "shapes.txt");
             numEntries = GtfsFileLoader.loadShapeData(shapeRepository, file.getAbsolutePath());
         } catch (IOException e) {
@@ -86,6 +89,7 @@ public class InMemoryDBTests {
     void loadStopTable_WithFileName_ExpectedBehavior() {
         int numEntries = -1;
         try {
+            stopRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "stops.txt");
             numEntries = GtfsFileLoader.loadStopData(stopRepository, file.getAbsolutePath());
         } catch (IOException e) {
@@ -108,6 +112,7 @@ public class InMemoryDBTests {
 
         int numEntries = -1;
         try {
+            tripRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "trips.txt");
             numEntries = GtfsFileLoader.loadTripData(
                     tripRepository,
@@ -123,7 +128,7 @@ public class InMemoryDBTests {
         log.info("Number of trips " + tripList.size());
         assertEquals(tripList.size(), numEntries);
 
-        Trip trip = tripRepository.findByTripId("11155207");
+        Trip trip = tripRepository.findByTripId("50167819");
         assertNotNull(trip);
     }
 
