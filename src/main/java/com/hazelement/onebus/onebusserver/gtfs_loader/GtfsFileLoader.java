@@ -200,7 +200,7 @@ public class GtfsFileLoader {
 
                     stopTimeRepository.save(stopTime);
                 });
-        return gtfsFileParser.parseFile() - 1;
+        return gtfsFileParser.parseFile();
     }
 
 

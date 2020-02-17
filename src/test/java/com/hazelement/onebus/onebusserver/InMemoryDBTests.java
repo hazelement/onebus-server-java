@@ -7,7 +7,9 @@ import com.hazelement.onebus.onebusserver.repositories.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
@@ -19,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class InMemoryDBTests {
     @Autowired
     private RouteRepository routeRepository;
@@ -30,18 +34,20 @@ public class InMemoryDBTests {
     private StopRepository stopRepository;
     @Autowired
     private TripRepository tripRepository;
+    @Autowired
+    private StopTimeRepository stopTimeRepository;
 
     String TEST_GTFS_FOLDER = "classpath:calgary_transit/";
 
     // todo test exceptions
     // todo add code coverage report
+    // todo test deletion and foreign key cascade
 
     @Test
     void loadRouteTable_WithFileName_ExpectedBehavior() {
 
         int numEntries = -1;
         try {
-            routeRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "routes.txt");
             numEntries = GtfsFileLoader.loadRouteData(routeRepository, file.getAbsolutePath());
         } catch (IOException e) {
@@ -57,7 +63,6 @@ public class InMemoryDBTests {
     void loadServiceTable_WithFileName_ExpectedBehavior() {
         int numEntries = -1;
         try {
-            serviceRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "calendar.txt");
             numEntries = GtfsFileLoader.loadServiceData(serviceRepository, file.getAbsolutePath());
         } catch (IOException e) {
@@ -73,7 +78,6 @@ public class InMemoryDBTests {
     void loadShapeTable_WithFileName_ExpectedBehavior() {
         int numEntries = -1;
         try {
-            shapeRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "shapes.txt");
             numEntries = GtfsFileLoader.loadShapeData(shapeRepository, file.getAbsolutePath());
         } catch (IOException e) {
@@ -89,7 +93,6 @@ public class InMemoryDBTests {
     void loadStopTable_WithFileName_ExpectedBehavior() {
         int numEntries = -1;
         try {
-            stopRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "stops.txt");
             numEntries = GtfsFileLoader.loadStopData(stopRepository, file.getAbsolutePath());
         } catch (IOException e) {
@@ -100,7 +103,7 @@ public class InMemoryDBTests {
         log.info("Number of stops " + stopList.size());
         assertEquals(stopList.size(), numEntries);
 
-        Stop stop = stopRepository.findByStopId("10000");
+        Stop stop = stopRepository.findByStopId("3481");
         assertNotNull(stop);
     }
 
@@ -112,7 +115,6 @@ public class InMemoryDBTests {
 
         int numEntries = -1;
         try {
-            tripRepository.deleteAllInBatch();
             File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "trips.txt");
             numEntries = GtfsFileLoader.loadTripData(
                     tripRepository,
@@ -132,6 +134,27 @@ public class InMemoryDBTests {
         assertNotNull(trip);
     }
 
+    @Test
+    void loadStopTimeTable_WithFileName_ExpectedBehavior() {
+        loadTripTable_WithFileName_ExpectedBehavior();
+        loadStopTable_WithFileName_ExpectedBehavior();
 
-    // todo test load StopTime
+        int numEntries = -1;
+        try {
+            File file = ResourceUtils.getFile(TEST_GTFS_FOLDER + "stop_times.txt");
+            numEntries = GtfsFileLoader.loadStopTimeData(
+                    stopTimeRepository,
+                    tripRepository,
+                    stopRepository,
+                    file.getAbsolutePath());
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        List<StopTime> stopTimeList = stopTimeRepository.findAll();
+        log.info("Number of stop times " + stopTimeList.size());
+        assertEquals(stopTimeList.size(), numEntries);
+    }
+
+
 }
